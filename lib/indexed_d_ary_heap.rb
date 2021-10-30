@@ -1,60 +1,61 @@
 class IndexedDAryHeap
-  attr_reader :size
+  attr_reader :degree
 
-  def initialize(array = [], degree = 2)
+  def initialize(hash = {}, degree = 2)
+    @data = hash.dup
     @degree = [2, degree].max
-    @values = []
     @child = []
     @parent = []
-    @position = [];
-    @inverse = [];
-    @size = 0
-    array.each_with_index { |v, i| self.<< i, v }
+    @position = {}
+    @inverse = []
+    @data.keys.each_with_index { |key,i| set_index(key, i) }
+    # heapify
+    max = [0, size / degree - 1].max
+    max.downto(0).each { |i| sink(i) }
   end
 
   def comparitor(a, b)
     a <=> b
   end
 
-  def <<(ki, v)
-    raise ArgumentError.new("key index already exists in heap") if include? ki
-    set_index(ki)
-    @values[ki] = v
-    swim(size)
-    @size += 1
+  def <<(key, v)
+    raise ArgumentError.new("key already exists in heap") if include? key
+    set_index(key, i)
+    @data[key] = v
+    swim(size-1)
     self
   end
 
-  def [](ki)
-    raise ArgumentError.new("key index not in heap") unless include? ki
-    @values[ki]
+  def [](key)
+    raise ArgumentError.new("key does not exist not in heap") unless include? key
+    @data[key]
   end
 
-  def []=(ki, v)
-    i = @position[ki]
-    values[ki] = v
+  def []=(key, v)
+    raise ArgumentError.new("key does not exist not in heap") unless include? key
+    i = @position[key]
+    data[ki] = v
     sink(i)
     swim(i)
     v
   end
 
   def decrease(ki, v)
-    self[ki]= v if less_v(v, self[ki])
+    self[key] = v if less_v(v, self[key])
   end
 
   def increase(ki, v)
-    self[ki]= v if less_v(self[ki], v)
+    self[key] = v if less_v(self[key], v)
   end
 
   def empty?
-    size == 0
+    @data.empty?
   end
 
   def clear
-    @values.clear
+    @data.clear
     @position.clear
     @inverse.clear
-    size = 0
   end
 
   def peek
@@ -65,15 +66,18 @@ class IndexedDAryHeap
     remove_at(0)
   end
 
-  def include?(ki)
-    @position[ki] != -1 && ki < @position.size
+  def include?(key)
+    @data.include? key
   end
 
-  def delete(ki)
-    return unless include? ki
-    i = @position[ki]
+  def delete(key)
+    return unless include? key
 
-    remove_at(i)
+    remove_at(@position[key])
+  end
+
+  def size
+    @data.size
   end
 
   private
@@ -82,11 +86,11 @@ class IndexedDAryHeap
     self[@inverse[i]]
   end
 
-  def set_index(i)
-    @parent[i] = (i - 1) / @degree
-    @child[i] = i * @degree + 1
-    @position[i] = size
-    @inverse[size] = i
+  def set_index(key, i)
+    @parent[i] = (i - 1) / degree
+    @child[i] = i * degree + 1
+    @position[key] = i
+    @inverse[i] = key
   end
 
   def swap(i, j)
@@ -120,7 +124,7 @@ class IndexedDAryHeap
   def min_child(i)
     index = -1
     c_start = @child[i]
-    c_end = [size, c_start+@degree].min
+    c_end = [size, c_start+degree].min
     (c_start...c_end).each do |j|
       if less(j, i)
         index = i = j
@@ -132,18 +136,16 @@ class IndexedDAryHeap
   def remove_at(i)
     return if empty?
 
-    ki = @inverse[i]
-    @size -= 1
-    swap(i, size)
+    swap(i, size-1)
+
+    key = @inverse.pop
+    value = @data.delete(key)
+    @position.delete(key)
+
     sink(i)
     swim(i)
 
-    value, @values[ki] = @values[ki], nil
-
-    @position[ki] = -1
-    @inverse[size] = -1
-
-    value
+    [key, value]
   end
 end
 
