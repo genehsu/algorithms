@@ -1,4 +1,6 @@
-require 'bi_hash'
+# frozen_string_literal: true
+
+require "bi_hash"
 
 # In general setting degree = Edges/Nodes is the best degree
 # to balance removals vs decrease key operations
@@ -20,7 +22,7 @@ class IndexedDAryHeap
       set_index(i, i)
     end
     # heapify
-    max = [0, size / degree - 1].max
+    max = [0, (size / degree) - 1].max
     max.downto(0).each { |i| sink(i) }
   end
 
@@ -29,7 +31,8 @@ class IndexedDAryHeap
   end
 
   def <<(key, v)
-    raise ArgumentError.new("key already exists in heap") if include? key
+    raise ArgumentError, "key already exists in heap" if include? key
+
     ki = @inverse[size] || size
     i = size
     @ki_map[key] = ki
@@ -41,12 +44,14 @@ class IndexedDAryHeap
   end
 
   def [](key)
-    raise ArgumentError.new("key does not exist not in heap") unless include? key
+    raise ArgumentError, "key does not exist not in heap" unless include? key
+
     @values[@ki_map[key]]
   end
 
   def []=(key, v)
-    raise ArgumentError.new("key does not exist not in heap") unless include? key
+    raise ArgumentError, "key does not exist not in heap" unless include? key
+
     ki = @ki_map[key]
     i = @position[ki]
     @values[ki] = v
@@ -101,7 +106,7 @@ class IndexedDAryHeap
 
   def set_index(ki, i)
     @parent[i] = (i - 1) / degree
-    @child[i] = i * degree + 1
+    @child[i] = (i * degree) + 1
     @position[ki] = i
     @inverse[i] = ki
   end
@@ -129,6 +134,7 @@ class IndexedDAryHeap
 
   def sink(i)
     return if i <= size
+
     while (j = min_child(i)) >= 0
       swap(i, j)
       i = j
@@ -138,11 +144,9 @@ class IndexedDAryHeap
   def min_child(i)
     index = -1
     c_start = @child[i]
-    c_end = [size, c_start+degree].min
+    c_end = [size, c_start + degree].min
     (c_start...c_end).each do |j|
-      if less(j, i)
-        index = i = j
-      end
+      index = i = j if less(j, i)
     end
     index
   end
@@ -156,7 +160,8 @@ class IndexedDAryHeap
     ki = @inverse[size]
     key = @ki_map.key(ki)
     @ki_map.delete(key)
-    value, @values[ki] = @values[ki], nil
+    value = @values[ki]
+    @values[ki] = nil
     @position[ki] = -1
 
     sink(i)
@@ -165,4 +170,3 @@ class IndexedDAryHeap
     [key, value]
   end
 end
-

@@ -1,10 +1,8 @@
-class DAryHeap
-  def initialize(array = [], degree = 2)
-    @degree = [2, degree].max
+# frozen_string_literal: true
+
+class BinaryHeap
+  def initialize(array = [])
     @data = array.dup
-    @child = []
-    @parent = []
-    @data.each_with_index { |_, i| set_index(i) }
     heapify
   end
 
@@ -13,14 +11,12 @@ class DAryHeap
   end
 
   def <<(v)
-    heap_size = size
     @data << v
-    set_index(heap_size)
-    swim(heap_size)
+    swim(size - 1)
     self
   end
 
-  def size()
+  def size
     @data.size
   end
 
@@ -41,7 +37,7 @@ class DAryHeap
   end
 
   def include?(e)
-    ! @data.find_index { |v| v.eql? e }.nil?
+    !@data.find_index { |v| v.eql? e }.nil?
   end
 
   def remove(e)
@@ -53,19 +49,13 @@ class DAryHeap
 
   private
 
-  def set_index(i)
-    @parent[i] = (i - 1) / @degree
-    @child[i] = i * @degree + 1
-  end
-
   def heapify
-    binding.pry
-    max = [0, size / 2 - 1].max
+    max = [0, (size / 2) - 1].max
     max.downto(0).each { |i| sink(i) }
   end
 
   def swap(i, j)
-    @data[i], @data[j] =@data[j], @data[i]
+    @data[i], @data[j] = @data[j], @data[i]
   end
 
   def less(i, j)
@@ -73,30 +63,28 @@ class DAryHeap
   end
 
   def swim(k)
-    while less(k, @parent[k])
-      swap(k, @parent[k])
-      k = @parent[k]
+    parent = (k - 1) / 2
+    while k > 0 && less(k, parent)
+      swap(k, parent)
+      k = parent
+      parent = (k - 1) / 2
     end
   end
 
   def sink(k)
     heap_size = size
-    while (j = min_child(k)) >= 0
-      swap(k, j)
-      k = j
-    end
-  end
+    while true
+      left = (2 * k) + 1
+      right = (2 * k) + 2
+      smallest = left
 
-  def min_child(i)
-    index = -1
-    c_start = @child[i]
-    c_end = [size-1, c_start+@degree].min
-    (c_start..c_end).each do |j|
-      if less(j, i)
-        index = i = j
-      end
+      smallest = right if right < heap_size && less(right, left)
+
+      break if left >= heap_size || less(k, smallest)
+
+      swap(smallest, k)
+      k = smallest
     end
-    index
   end
 
   def remove_at(k)
