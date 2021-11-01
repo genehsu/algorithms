@@ -1,3 +1,5 @@
+require 'delegate'
+
 class BiHash < DelegateClass(Hash)
   def initialize(hash = {})
     @data = hash.dup

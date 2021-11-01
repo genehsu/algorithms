@@ -34,7 +34,7 @@ class IndexedDAryHeap
     @values[@ki_map[key]] = v
     set_index(ki, i)
     swim(size)
-    size += 1
+    @size += 1
     self
   end
 
@@ -81,7 +81,7 @@ class IndexedDAryHeap
   end
 
   def include?(key)
-    @ki_map.include? key &&
+    @ki_map.include?(key) &&
       @position[@ki_map[key]] != -1
   end
 
@@ -126,6 +126,7 @@ class IndexedDAryHeap
   end
 
   def sink(i)
+    return if i <= size
     while (j = min_child(i)) >= 0
       swap(i, j)
       i = j
@@ -155,7 +156,6 @@ class IndexedDAryHeap
     @ki_map.delete(key)
     value, @values[ki] = @values[ki], nil
     @position[ki] = -1
-    @inverse[size] = -1
 
     sink(i)
     swim(i)
