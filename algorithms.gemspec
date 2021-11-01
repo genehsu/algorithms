@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary       = "Algorithms and Data Structures I've been exploring"
   spec.homepage      = "https://github.com/genehsu/algorithms"
   spec.license       = "All Rights Reserved"
-  spec.required_ruby_version = ">= 2.4.0"
+  spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/genehsu/algorithms"
@@ -26,5 +26,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_development_dependency "pry-byebug"
+  spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec", "~> 3.10"
+  spec.add_development_dependency "rubocop-rake"
+  spec.add_development_dependency "rubocop-rspec"
 end
