@@ -1,5 +1,7 @@
 require 'bi_hash'
 
+# In general setting degree = Edges/Nodes is the best degree
+# to balance removals vs decrease key operations
 class IndexedDAryHeap
   attr_reader :degree, :size
 
