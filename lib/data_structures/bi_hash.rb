@@ -112,7 +112,7 @@ module DataStructures
     protected
 
     def index_values
-      @inverse = @data.invert
+      @inverse = @data.each_with_object({}) { |(k, v), hash| hash[v] = k unless hash.key? v }
     end
   end
 end
