@@ -165,6 +165,7 @@ RSpec.describe DataStructures::BinaryHeap do
 
   describe "#include?" do
     subject { heap.include? value }
+
     let(:value) { "c" }
 
     context "when the element exists in the heap" do
@@ -181,15 +182,17 @@ RSpec.describe DataStructures::BinaryHeap do
   end
 
   describe "#remove" do
-    subject { heap.remove value }
+    subject(:remove) { heap.remove value }
+
     let(:value) { "c" }
 
     context "when the element exists in the heap" do
       let(:array) { %w[a b c d e] }
 
       it { is_expected.to eq value }
+
       it "changes the size of the heap" do
-        expect { subject }.to change(heap, :size).by(-1)
+        expect { remove }.to change(heap, :size).by(-1)
       end
     end
 
