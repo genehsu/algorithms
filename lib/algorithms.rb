@@ -8,3 +8,4 @@ module DataStructures; end
 # rubocop:enable Layout/EmptyLineBetweenDefs,Style/Documentation
 
 require_relative "data_structures/bi_hash"
+require_relative "data_structures/binary_heap"

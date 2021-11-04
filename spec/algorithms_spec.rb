@@ -6,6 +6,7 @@ end
 
 DATA_STRUCTURES_CLASSES = %w[
   BiHash
+  BinaryHeap
 ].freeze
 
 RSpec.describe Algorithms do

@@ -1,3 +1,7 @@
+require:
+- rubocop-rake
+- rubocop-rspec
+
 AllCops:
   NewCops: "enable"
   TargetRubyVersion: 2.7
@@ -16,3 +20,16 @@ Style/StringLiterals:
 Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: double_quotes
+
+RSpec/ContextWording:
+  Prefixes:
+    - when
+    - with
+    - without
+    - and
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 6
