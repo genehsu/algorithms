@@ -9,3 +9,4 @@ module DataStructures; end
 
 require_relative "data_structures/bi_hash"
 require_relative "data_structures/binary_heap"
+require_relative "data_structures/d_ary_heap"
