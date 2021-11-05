@@ -8,6 +8,7 @@ DATA_STRUCTURES_CLASSES = %w[
   BiHash
   BinaryHeap
   DAryHeap
+  IndexedDAryHeap
 ].freeze
 
 RSpec.describe Algorithms do

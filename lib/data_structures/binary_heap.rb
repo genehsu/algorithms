@@ -88,15 +88,10 @@ module DataStructures
     def min_child(i)
       left = (2 * i) + 1
       right = (2 * i) + 2
-      if left >= size
-        -1
-      elsif right < size && less(right, left)
-        right
-      elsif less(i, left)
-        -1
-      else
-        left
-      end
+      return -1 if left >= size
+      return right if right < size && less(right, left)
+
+      less(i, left) ? -1 : left
     end
 
     def remove_at(k)
