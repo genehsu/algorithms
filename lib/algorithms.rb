@@ -8,6 +8,7 @@ module DataStructures; end
 # rubocop:enable Layout/EmptyLineBetweenDefs,Style/Documentation
 
 require_relative "algorithms/breadth_first_search"
+require_relative "algorithms/depth_first_search"
 
 require_relative "data_structures/adjacency_list"
 require_relative "data_structures/bi_hash"
