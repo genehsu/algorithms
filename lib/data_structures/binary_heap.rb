@@ -80,6 +80,7 @@ module DataStructures
 
     def sink(i)
       while (j = min_child(i)) >= 0
+        p "sink: swap(#{j}, #{i}): #{@data}"
         swap(j, i)
         i = j
       end
@@ -89,9 +90,9 @@ module DataStructures
       left = (2 * i) + 1
       right = (2 * i) + 2
       return -1 if left >= size
-      return right if right < size && less(right, left)
+      return right if right < size && less(right, left) && less(right, i)
 
-      less(i, left) ? -1 : left
+      less(left, i) ? left : -1
     end
 
     def remove_at(k)
